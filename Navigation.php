@@ -23,11 +23,11 @@ class Navigation extends Control
 	/** @var bool */
 	private $useHomepage = false;
 
-	/** @var string */
-	private $menuTemplate;
+	/** @var Nette\Callback */
+	private $setupMenuTemplate;
 
-	/** @var string */
-	private $breadcrumbsTemplate;
+	/** @var Nette\Callback */
+	private $setupBreadcrumbsTemplate;
 
 	/**
 	 * Set node as current
@@ -86,7 +86,12 @@ class Navigation extends Control
 	public function renderMenu($renderChildren = TRUE, $base = NULL, $renderHomepage = TRUE)
 	{
 		$template = $this->createTemplate()
-			->setFile($this->menuTemplate ?: __DIR__ . '/menu.phtml');
+				->setFile(__DIR__ . '/menu.phtml');
+		
+		if (isset($this->setupMenuTemplate)) {
+		    $template = $this->setupMenuTemplate->invoke($template);
+		}
+		
 		$template->homepage = $base ? $base : $this->getComponent('homepage');
 		$template->useHomepage = $this->useHomepage && $renderHomepage;
 		$template->renderChildren = $renderChildren;
@@ -133,26 +138,30 @@ class Navigation extends Control
 		}
 
 		$template = $this->createTemplate()
-			->setFile($this->breadcrumbsTemplate ?: __DIR__ . '/breadcrumbs.phtml');
+				->setFile(__DIR__ . '/breadcrumbs.phtml');
+		
+		if (isset($this->setupBreadcrumbsTemplate)) {
+		    $template = $this->setupBreadcrumbsTemplate->invoke($template);
+		}
 
 		$template->items = $items;
 		$template->render();
 	}
 
 	/**
-	 * @param string $breadcrumbsTemplate
+	 * @param callable $callback($template)
 	 */
-	public function setBreadcrumbsTemplate($breadcrumbsTemplate)
+	public function setupBreadcrumbsTemplate($callback)
 	{
-		$this->breadcrumbsTemplate = $breadcrumbsTemplate;
+		$this->setupBreadcrumbsTemplate = callback($callback);
 	}
 
 	/**
-	 * @param string $menuTemplate
+	 * @param callable $callback($template)
 	 */
-	public function setMenuTemplate($menuTemplate)
+	public function setupMenuTemplate($callback)
 	{
-		$this->menuTemplate = $menuTemplate;
+		$this->setupMenuTemplate = callback($callback);
 	}
 
 	/**
