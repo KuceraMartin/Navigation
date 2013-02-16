@@ -1,0 +1,14 @@
+{
+  "name": "KuceraMartin/Navigation",
+  "description": "Control pro Nette Framework usnadňující tvorbu menu a drobečkové navigace",
+  "homepage": "https://github.com/KuceraMartin/Navigation",
+  "license": ["MIT"],
+  "authors": [
+    {
+    "name": "Jan Marek",
+    },
+  ],
+  "require": {
+    "nette/nette": "*",
+  }
+}
