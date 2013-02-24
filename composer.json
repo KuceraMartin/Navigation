@@ -8,6 +8,9 @@
     "name": "Jan Marek"
     }
   ],
+  "autoload": {
+    "files": ["Navigation.php", "NavigationNode.php"]
+  },
   "require": {
     "nette/nette": "*"
   }
